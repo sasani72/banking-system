@@ -9,7 +9,7 @@ class Account extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['customer_id', 'balance'];
+    protected $fillable = ['customer_id', 'balance', 'name', 'uuid'];
 
     public function customer()
     {

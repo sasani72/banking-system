@@ -1,17 +1,13 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests;
 
-use Illuminate\Auth\Events\Lockout;
+use App\Rules\NotIdentical;
 use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\RateLimiter;
-use Illuminate\Support\Str;
-use Illuminate\Validation\ValidationException;
 
-class LoginRequest extends FormRequest
+class TransferMoneyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,13 +20,14 @@ class LoginRequest extends FormRequest
     /**
      * Get the validation rules that apply to the request.
      *
-     * @return array<string, \Illuminate\Contracts\Validation\Rule|array|string>
+     * @return array<string, \Illuminate\Contracts\Validation\ValidationRule|array|string>
      */
     public function rules(): array
     {
         return [
-            'email' => ['required', 'string', 'email'],
-            'password' => ['required', 'string'],
+            'origin_account' => 'required|exists:accounts,uuid',
+            'destination_account' => ['required','exists:accounts,uuid', new NotIdentical],
+            'amount' => 'required|integer|min:10',
         ];
     }
 
@@ -41,5 +38,4 @@ class LoginRequest extends FormRequest
             'data' => $validator->errors()
         ]));
     }
-
 }
