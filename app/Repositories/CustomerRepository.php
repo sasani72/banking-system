@@ -20,7 +20,7 @@ class CustomerRepository
      */
     public function getAll()
     {
-        return Customer::all();
+        return Customer::with('accounts')->get();
     }
 
     /**
@@ -29,7 +29,7 @@ class CustomerRepository
      */
     public function getById($id)
     {
-        return Customer::find($id);
+        return Customer::with('accounts')->find($id);
     }
 
     /**
