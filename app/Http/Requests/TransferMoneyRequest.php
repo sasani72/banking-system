@@ -31,6 +31,9 @@ class TransferMoneyRequest extends FormRequest
         ];
     }
 
+    /**
+     * @param Validator $validator
+     */
     public function failedValidation(Validator $validator)
     {
         throw new HttpResponseException(response()->json([

@@ -25,6 +25,12 @@ class AccountController extends Controller
         $this->accountService = $accountService;
     }
 
+    /**
+     * Add new account for given customer
+     * 
+     * @param AddAccountRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(AddAccountRequest $request)
     {
         $uuid = Str::uuid()->toString();
@@ -39,6 +45,13 @@ class AccountController extends Controller
         ]);
     }
 
+    /**
+     * operate given transaction for the given account
+     * 
+     * @param Account $account
+     * @param Request $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function transaction(Account $account, Request $request)
     {
         $aggregateRoot = AccountAggregate::retrieve($account->uuid);
@@ -60,6 +73,12 @@ class AccountController extends Controller
         ]);
     }
 
+    /**
+     * transfer money to given account
+     * 
+     * @param TransferMoneyRequest $request
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function transferTo(TransferMoneyRequest $request)
     {
         DB::beginTransaction();
@@ -80,13 +99,19 @@ class AccountController extends Controller
         } catch (ExceptionCouldNotSubtractMoney $e) {
 
             DB::rollback();
-    
+
             return response()->json([
                 'error' => 'Insufficient funds in the origin account.',
             ], Response::HTTP_BAD_REQUEST);
         }
     }
 
+    /**
+     * retrieve the Transaction class according to transaction Type
+     * 
+     * @param string $transactionType
+     * @return TransactionStrategy|null
+     */
     private function getTransactionStrategy(string $transactionType): ?TransactionStrategy
     {
         return match ($transactionType) {
@@ -96,6 +121,12 @@ class AccountController extends Controller
         };
     }
 
+    /**
+     * retrieve balances of an account
+     * 
+     * @param Account $account
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getBalances(Account $account)
     {
         $aggregateRoot = AccountAggregate::retrieve($account->uuid);
@@ -108,7 +139,13 @@ class AccountController extends Controller
             'current_balance' => sprintf('%0.2f', $currentBalance)
         ]);
     }
-    
+
+    /**
+     * retrieve transfer history of given account
+     * 
+     * @param Account $account
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function getTransferHistory(Account $account)
     {
         $res = $this->accountService->getTransferHistoryByUuid($account->uuid);

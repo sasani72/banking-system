@@ -7,6 +7,10 @@ use Illuminate\Http\Response;
 
 class ExceptionCouldNotSubtractMoney extends Exception
 {
+    /**
+     * @param $data
+     * @return Response
+     */
     public function render($data): Response
     {
         return response([

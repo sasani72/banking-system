@@ -10,6 +10,10 @@ class NotIdentical implements DataAwareRule ,ValidationRule
 {
     protected $data = [];
 
+    /**
+     * @param array $data
+     * @return $this|DataAwareRule
+     */
     public function setData(array $data)
     {
         $this->data = $data;

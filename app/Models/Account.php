@@ -11,6 +11,9 @@ class Account extends Model
 
     protected $fillable = ['customer_id', 'balance', 'name', 'uuid'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
     public function customer()
     {
         return $this->belongsTo(Customer::class);

@@ -9,6 +9,11 @@ use Spatie\EventSourcing\StoredEvents\Repositories\EloquentStoredEventRepository
 
 class CustomStoredEventRepository extends EloquentStoredEventRepository
 {
+    /**
+     * @param string $event
+     * @param string $uuid
+     * @return EloquentStoredEventCollection
+     */
     public function retrieveAllWhereEvent(string $event, string $uuid):EloquentStoredEventCollection
     {
 
@@ -18,6 +23,9 @@ class CustomStoredEventRepository extends EloquentStoredEventRepository
             ->get();
     }
 
+    /**
+     * @return EloquentStoredEventQueryBuilder
+     */
     private function getQuery(): EloquentStoredEventQueryBuilder
     {
         return $this->storedEventModel::query();

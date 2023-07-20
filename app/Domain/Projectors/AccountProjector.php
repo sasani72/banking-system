@@ -19,6 +19,11 @@ class AccountProjector extends Projector implements ShouldQueue
         $this->accountService = $accountService;
     }
 
+    /**
+     * create account when AccountCreated event proccessed
+     * 
+     * @param AccountCreated $event
+     */
     public function onAccountCreated(AccountCreated $event)
     {
         $this->accountService->createAccount([
@@ -28,16 +33,31 @@ class AccountProjector extends Projector implements ShouldQueue
         ]);
     }
 
+    /**
+     * add deposit to account when MoneyAdded event proccessed
+     * 
+     * @param MoneyAdded $event
+     */
     public function onMoneyAdded(MoneyAdded $event)
     {
         $this->accountService->addMoneyToAccount($event->aggregateRootUuid(), $event->amount);
     }
 
+    /**
+     * withdraw deposit from account when MoneySubtracted event proccessed
+     * 
+     * @param MoneySubtracted $event
+     */
     public function onMoneySubtracted(MoneySubtracted $event)
     {
         $this->accountService->subtractMoneyFromAccount($event->aggregateRootUuid(), $event->amount);
     }
 
+    /**
+     * withdraw deposit from account when MoneyTransferred event proccessed
+     * 
+     * @param MoneyTransferred $event
+     */
     public function onMoneyTransferred(MoneyTransferred $event)
     {
         $this->accountService->subtractMoneyFromAccount($event->aggregateRootUuid(), $event->amount);

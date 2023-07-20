@@ -11,6 +11,9 @@ class Customer extends Model
 
     protected $fillable = ['name'];
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function accounts()
     {
         return $this->hasMany(Account::class);

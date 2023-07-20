@@ -15,6 +15,10 @@ class AccountRepository
         $this->customStoredEventsService = $customStoredEventsService;
     }
 
+    /**
+     * @param array $data
+     * @return mixed
+     */
     public function create(array $data)
     {
         return Account::create([
@@ -24,21 +28,36 @@ class AccountRepository
         ]);
     }
 
+    /**
+     * @param string $uuid
+     * @return Account|null
+     */
     public function getByUuid(string $uuid): ?Account
     {
         return Account::where('uuid', $uuid)->first();
     }
 
+    /**
+     * @param Account $account
+     */
     public function save(Account $account): void
     {
         $account->save();
     }
 
+    /**
+     * @param Account $account
+     * @return Account
+     */
     public function loadRelationships(Account $account)
     {
         return $account->load('customer');
     }
 
+    /**
+     * @param string $uuid
+     * @return array
+     */
     public function getTransferHistoryByUuid(string $uuid)
     {
         $transferEvents = $this->customStoredEventsService->getTransferHistory($uuid);
@@ -48,7 +67,7 @@ class AccountRepository
         foreach (collect($transferEvents) as $transfer) {
 
             $destinationAccount = $this->getByUuid($transfer['event_properties']['destinationUuid']);
-            
+
             if (!$destinationAccount){
                 continue;
             }

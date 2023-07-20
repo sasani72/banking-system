@@ -16,12 +16,19 @@ class CustomerController extends Controller
         $this->customerService = $customerService;
     }
 
+    /**
+     * @return CustomerCollection
+     */
     public function index()
     {
         $customers = $this->customerService->getAllCustomers();
         return new CustomerCollection($customers);
     }
 
+    /**
+     * @param $id
+     * @return CustomerResource|\Illuminate\Http\JsonResponse
+     */
     public function show($id)
     {
         $customer = $this->customerService->getCustomerById($id);
@@ -33,8 +40,10 @@ class CustomerController extends Controller
         return new CustomerResource($customer);
     }
 
+
     /**
-     * Store a newly created resource in storage.
+     * @param Request $request
+     * @return CustomerResource
      */
     public function store(Request $request)
     {
@@ -50,6 +59,11 @@ class CustomerController extends Controller
             ->additional(['message' => 'Customer created successfully']);
     }
 
+    /**
+     * @param Request $request
+     * @param $id
+     * @return CustomerResource|\Illuminate\Http\JsonResponse
+     */
     public function update(Request $request, $id)
     {
         $request->validate([
@@ -68,6 +82,10 @@ class CustomerController extends Controller
             ->additional(['message' => 'Customer updated successfully']);
     }
 
+    /**
+     * @param $id
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy($id)
     {
         $customer = $this->customerService->deleteCustomer($id);

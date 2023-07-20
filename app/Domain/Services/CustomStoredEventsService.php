@@ -14,6 +14,10 @@ class CustomStoredEventsService
         $this->storedEventRepository = $storedEventRepository;
     }
 
+    /**
+     * @param string $uuid
+     * @return \Spatie\EventSourcing\StoredEvents\Models\EloquentStoredEventCollection
+     */
     public function getTransferHistory(string $uuid)
     {
         return $this->storedEventRepository->retrieveAllWhereEvent(MoneyTransferred::class, $uuid);
